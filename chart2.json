@@ -1,0 +1,141 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Military Expenditure per Country (2012-2018, Billion USD)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Nafiz71/FIT3179/main/filtered_top_10_countries_billion.csv"
+  },
+  "params": [
+    {
+      "name": "Expenditure_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 700,
+        "step": 10,
+        "name": "Minimum Expenditure (Billion USD): "
+      }
+    },
+    {
+      "name": "CountrySelection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "United States",
+          "China",
+          "Germany",
+          "France",
+          "United Kingdom",
+          "India",
+          "Japan",
+          "South Korea",
+          "Saudi Arabia"
+        ],
+        "labels": [
+          "Show All",
+          "United States",
+          "China",
+          "Germany",
+          "France",
+          "United Kingdom",
+          "India",
+          "Japan",
+          "South Korea",
+          "Saudi Arabia"
+        ],
+        "name": "Country Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "fold": ["2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+      "as": ["Year", "Expenditure"]
+    },
+    {"calculate": "toNumber(datum.Expenditure)", "as": "Expenditure"},
+    {"filter": "datum.Expenditure > Expenditure_Above"},
+    {
+      "filter": "CountrySelection == null || datum.Name == CountrySelection"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": "Year",
+      "axis": {"tickCount": 7}
+    },
+    "y": {
+      "field": "Expenditure",
+      "type": "quantitative",
+      "title": "Military Expenditure (Billion USD)"
+    }
+  },
+  "layer": [
+    {
+      "mark": "circle",
+      "encoding": {
+        "size": {
+          "field": "Expenditure",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [10, 50, 100, 300, 500],
+            "range": [10, 50, 150, 200, 300]
+          }
+        },
+        "color": {
+          "field": "Name",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "United States",
+              "China",
+              "Germany",
+              "France",
+              "United Kingdom",
+              "India",
+              "Japan",
+              "South Korea",
+              "Saudi Arabia"
+            ],
+            "range": [
+              "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+              "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22"
+            ]
+          }
+        },
+        "opacity": {"value": 0.6},
+        "tooltip": [
+          {"field": "Name", "type": "nominal", "title": "Country"},
+          {"field": "Expenditure", "type": "quantitative", "title": "Expenditure (Billion USD)", "format": ".2f"},
+          {"field": "Year", "type": "ordinal", "title": "Year"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -12,
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "text": {"field": "Name", "type": "nominal"},
+        "color": {"value": "black"},
+        "opacity": {
+          "condition": {
+            "test": "datum['Name'] == 'United States' || datum['Name'] == 'China' || datum['Name'] == 'India' || datum['Name'] == 'Saudi Arabia' || datum['Name'] == 'Germany'",
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    }
+  ]
+}
