@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Import Vega & Vega-Lite -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+  
+  <title>Military Expenditure Visualization</title>
+</head>
+<body>
+
+<h1>Military Expenditure per Country (2012-2018)</h1>
+  
+<div id="military_expenditure_viz"></div>
+
+<script type="text/javascript">
+
+  // Reference to the milexpne.json Vega-Lite specification file in the same folder
+  var spec = "milexpen.json";
+
+  // Embed the Vega-Lite specification into the div with id "military_expenditure_viz"
+  vegaEmbed('#military_expenditure_viz', spec).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+</script>
+
+</body>
+</html>
