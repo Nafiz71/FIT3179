@@ -1,0 +1,47 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "height": 500,
+  "width": 800,
+  "title": "Military Expenditure per Country (2012-2018, Billion USD)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Nafiz71/FIT3179/main/filtered_top_10_countries_billion.csv"
+  },
+  "transform": [
+    {
+      "fold": ["2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+      "as": ["Year", "Expenditure"]
+    },
+    {"calculate": "toNumber(datum.Expenditure)", "as": "Expenditure"}
+  ],
+  "mark": "line",
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "title": "Year"
+    },
+    "y": {
+      "field": "Expenditure",
+      "type": "quantitative",
+      "title": "Military Expenditure (Billion USD)"
+    },
+    "color": {
+      "field": "Name",
+      "type": "nominal",
+      "title": "Country"
+    },
+    "tooltip": [
+      {"field": "Name", "type": "nominal", "title": "Country"},
+      {"field": "Year", "type": "ordinal", "title": "Year"},
+      {"field": "Expenditure", "type": "quantitative", "title": "Military Expenditure (Billion USD)", "format": ".2f"}
+    ]
+  },
+  "layer": [
+    {
+      "mark": "line"
+    },
+    {
+      "mark": {"type": "point", "tooltip": true}
+    }
+  ]
+}
