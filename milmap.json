@@ -1,0 +1,113 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Global Military Expenditure (2018, Billion USD)",
+  "width": 800,
+  "height": 400,
+  "projection": {
+    "type": "equalEarth"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/js/ne_110m_admin_0_countries.topojson",
+    "format": {
+      "type": "topojson",
+      "feature": "ne_110m_admin_0_countries"
+    }
+  },
+  "params": [
+    {
+      "name": "Expenditure_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 700,
+        "step": 10,
+        "name": "Minimum Expenditure (Billion USD): "
+      }
+    },
+    {
+      "name": "YearSelection",
+      "bind": {
+        "input": "select",
+        "options": ["2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+        "name": "Select Year: "
+      },
+      "value": "2018"  // default to 2018
+    }
+  ],
+  "transform": [
+    {
+      "lookup": "properties.ISO_A3",  // Use ISO3 code in the TopoJSON
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/Nafiz71/FIT3179/main/filtered_top_10_countries_billion.csv",
+          "format": {
+            "type": "csv"
+          }
+        },
+        "key": "Code",  // Use ISO3 code from your CSV
+        "fields": ["2012", "2013", "2014", "2015", "2016", "2017", "2018"]
+      }
+    },
+    {
+      "fold": ["2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+      "as": ["Year", "Expenditure"]
+    },
+    {
+      "calculate": "toNumber(datum.Expenditure)",
+      "as": "Expenditure"
+    },
+    {
+      "filter": "datum.Expenditure > Expenditure_Above"
+    },
+    {
+      "filter": "datum.Year == YearSelection"
+    }
+  ],
+  "mark": {
+    "type": "geoshape",
+    "stroke": "white",
+    "strokeWidth": 0.5
+  },
+  "encoding": {
+    "color": {
+      "condition": {
+        "test": "datum.Expenditure != null",  // Countries with data will use the color scale
+        "field": "Expenditure",
+        "type": "quantitative",
+        "scale": {
+          "type": "linear",
+          "domain": [0, 50, 100, 200, 500],
+          "range": [
+            "#ffffff",
+            "#ffcc99",
+            "#ff9966",
+            "#ff6633",
+            "#ff3300",
+            "#ff0000"
+          ]
+        },
+        "title": "Military Expenditure (Billion USD)"
+      },
+      "value": "yellow"  // Default color for countries without data
+    },
+    "tooltip": [
+      {
+        "field": "properties.NAME",
+        "type": "nominal",
+        "title": "Country"
+      },
+      {
+        "field": "Expenditure",
+        "type": "quantitative",
+        "title": "Military Expenditure (Billion USD)",
+        "format": ".2f"
+      },
+      {
+        "field": "Year",
+        "type": "ordinal",
+        "title": "Year"
+      }
+    ]
+  }
+}
