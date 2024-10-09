@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Import Vega & Vega-Lite -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  
+  <!-- CSS file -->
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+  
+  <title>Military Expenditure Visualization</title>
+</head>
+<body>
+
+<h1>Military Expenditure per Country (2012-2018)</h1>
+  
+<!-- Div for the first visualization (milexpen.json) -->
+<div id="military_expenditure_viz"></div>
+
+<!-- Div for the second visualization (chart2.json) -->
+<div id="second_chart_viz"></div>
+
+<!-- Div for the new map visualization (worldmilmap.json) -->
+<div id="world_military_map_viz"></div>
+
+<script type="text/javascript">
+
+  // Embed the first visualization (milexpen.json)
+  vegaEmbed('#military_expenditure_viz', 'milexpen.json').then(function(result) {
+    // Access the Vega view instance for the first visualization
+  }).catch(console.error);
+
+  // Embed the second visualization (chart2.json)
+  vegaEmbed('#second_chart_viz', 'chart2.json').then(function(result) {
+    // Access the Vega view instance for the second visualization
+  }).catch(console.error);
+
+  // Embed the new world military expenditure map (worldmilmap.json)
+  vegaEmbed('#world_military_map_viz', 'worldmilmap.json').then(function(result) {
+    // Access the Vega view instance for the new map visualization
+  }).catch(console.error);
+
+</script>
+
+</body>
+</html>
